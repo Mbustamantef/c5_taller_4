@@ -12,7 +12,6 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 - Controlar productos, proveedores, clientes y depósitos.
 - Gestionar movimientos de inventario (entradas, salidas, transferencias, ajustes).
 - Mantener stock actualizado y valorizado.
-- Generar reportes de existencias, márgenes, rotación y aging.
 - Ofrecer una estructura base para integrar módulos de compras, ventas o facturación.
 
 ---
@@ -42,7 +41,6 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 ### 💳 Ventas
 - Registro de ventas asociadas a un cliente.
 - Detalle de productos vendidos, cantidades, precios y descuentos.
-- Cálculo automático de IVA y totales.
 - Impacto inmediato en el stock (salida de depósito).
 
 ### 📦 Movimientos de Inventario
@@ -56,7 +54,7 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 | **Administrador** | Configura usuarios, depósitos, categorías y políticas del sistema. |
 | **Depósito** | Registra movimientos, entradas, salidas y transferencias. |
 | **Aprobador** | Autoriza ajustes negativos o movimientos especiales. |
-| **Auditor/Finanzas** | Accede a reportes y KPIs, sin modificar stock. |
+| **Auditor/Finanzas** | Accede a reportes , sin modificar stock. |
 
 ---
 
@@ -76,21 +74,8 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 - Stock valorizado por depósito, categoría o proveedor.
 - Productos con stock por debajo del mínimo.
 - Productos sin movimiento (últimos X días).
-- Rotación de inventario y aging.
+- Rotación de inventario.
 - Ventas por cliente, categoría o periodo.
 - Margen bruto por producto o por venta.
-
 ---
-
-## 🧠 KPIs Recomendados
-| Métrica | Descripción |
-|----------|--------------|
-| **Cobertura de stock (días)** | Stock actual / consumo promedio diario |
-| **Rotación de inventario** | Ventas / stock promedio |
-| **% artículos bajo mínimo** | Artículos con stock < mínimo / total artículos |
-| **Margen promedio** | (Precio neto - Costo) / Precio neto |
-
----
-
-## 🧱 Estructura General del Sistema
 
