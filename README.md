@@ -1,67 +1,97 @@
-# taller4
+# 🏢 Sistema de Gestión de Inventario (Java + Quarkus)
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+## 📋 Descripción General
+Este proyecto es un **sistema de gestión de inventario empresarial**, diseñado para controlar productos, proveedores, clientes y depósitos internos.  
+El objetivo es brindar una visión clara de las **entradas, salidas, transferencias, márgenes y stock valorizado**, permitiendo conocer en todo momento la situación de la empresa.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, con trazabilidad completa de los movimientos de stock.
 
-## Running the application in dev mode
+---
 
-You can run your application in dev mode that enables live coding using:
+## 🧩 Objetivos Principales
+- Controlar productos, proveedores, clientes y depósitos.
+- Gestionar movimientos de inventario (entradas, salidas, transferencias, ajustes).
+- Mantener stock actualizado y valorizado.
+- Generar reportes de existencias, márgenes, rotación y aging.
+- Ofrecer una estructura base para integrar módulos de compras, ventas o facturación.
 
-```shell script
-./mvnw quarkus:dev
-```
+---
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+## ⚙️ Alcance Funcional
 
-## Packaging and running the application
+### 🏷️ Productos
+- Registro con SKU, nombre, categoría, IVA y estado (activo/inactivo).
+- Asociación a múltiples proveedores y múltiples depósitos.
+- Control de stock mínimo por depósito.
+- Kardex por producto y por ubicación.
 
-The application can be packaged using:
+### 🏬 Depósitos
+- Definición de múltiples depósitos o sucursales.
+- Asignación de un **responsable** por depósito (relación 1:N).
+- Transferencias entre depósitos con trazabilidad (salida + entrada vinculadas).
 
-```shell script
-./mvnw package
-```
+### 🚚 Proveedores
+- Registro de proveedores con datos básicos (nombre, contacto, moneda, plazo de pago).
+- Asociación a múltiples productos (relación M:N).
+- Información de precios de compra, plazo de entrega y prioridad.
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+### 👥 Clientes
+- Registro de clientes con datos de contacto y tipo (minorista, mayorista, etc.).
+- Relación **1:N con Ventas**, donde cada cliente puede tener múltiples operaciones.
+- Historial de compras, montos totales y frecuencia.
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
+### 💳 Ventas
+- Registro de ventas asociadas a un cliente.
+- Detalle de productos vendidos, cantidades, precios y descuentos.
+- Cálculo automático de IVA y totales.
+- Impacto inmediato en el stock (salida de depósito).
 
-If you want to build an _über-jar_, execute the following command:
+### 📦 Movimientos de Inventario
+- Tipos: **Entrada, Salida, Transferencia, Ajuste**.
+- Motivos definidos (compra, venta, pérdida, ajuste manual, etc.).
+- Auditoría completa (usuario, fecha, cantidad, depósito origen/destino).
 
-```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
-```
+### 🔐 Roles del Sistema
+| Rol | Funciones principales |
+|------|------------------------|
+| **Administrador** | Configura usuarios, depósitos, categorías y políticas del sistema. |
+| **Depósito** | Registra movimientos, entradas, salidas y transferencias. |
+| **Aprobador** | Autoriza ajustes negativos o movimientos especiales. |
+| **Auditor/Finanzas** | Accede a reportes y KPIs, sin modificar stock. |
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+---
 
-## Creating a native executable
+## 🧮 Relaciones del Modelo de Datos
 
-You can create a native executable using:
+| Entidades | Tipo de relación | Descripción |
+|------------|------------------|--------------|
+| **Responsable → Depósito** | 1 : N | Un responsable puede administrar varios depósitos. |
+| **Producto ↔ Depósito** | M : N | Un producto puede estar en varios depósitos (tabla intermedia `Stock`). |
+| **Producto ↔ Proveedor** | M : N | Un producto puede tener varios proveedores asociados (`ProductoProveedor`). |
+| **Cliente → Venta** | 1 : N | Un cliente puede realizar múltiples ventas. |
+| **Venta → DetalleVenta** | 1 : N | Cada venta contiene varios productos vendidos. |
 
-```shell script
-./mvnw package -Dnative
-```
+---
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+## 📊 Reportes Clave
+- Stock valorizado por depósito, categoría o proveedor.
+- Productos con stock por debajo del mínimo.
+- Productos sin movimiento (últimos X días).
+- Rotación de inventario y aging.
+- Ventas por cliente, categoría o periodo.
+- Margen bruto por producto o por venta.
 
-```shell script
-./mvnw package -Dnative -Dquarkus.native.container-build=true
-```
+---
 
-You can then execute your native executable with: `./target/taller4-1.0.0-SNAPSHOT-runner`
+## 🧠 KPIs Recomendados
+| Métrica | Descripción |
+|----------|--------------|
+| **Cobertura de stock (días)** | Stock actual / consumo promedio diario |
+| **Rotación de inventario** | Ventas / stock promedio |
+| **% artículos bajo mínimo** | Artículos con stock < mínimo / total artículos |
+| **Margen promedio** | (Precio neto - Costo) / Precio neto |
 
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
+---
 
-## Related Guides
+## 🧱 Estructura General del Sistema
 
-- REST ([guide](https://quarkus.io/guides/rest)): A Jakarta REST implementation utilizing build time processing and Vert.x. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-- REST JSON-B ([guide](https://quarkus.io/guides/rest#json-serialisation)): JSON-B serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it.
-
-## Provided Code
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
