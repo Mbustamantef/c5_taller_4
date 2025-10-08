@@ -20,10 +20,9 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 ## ⚙️ Alcance Funcional
 
 ### 🏷️ Productos
-- Registro con SKU, nombre, categoría, IVA y estado (activo/inactivo).
+- Registro con id, nombre, categoría y estado (activo/inactivo).
 - Asociación a múltiples proveedores y múltiples depósitos.
 - Control de stock mínimo por depósito.
-- Kardex por producto y por ubicación.
 
 ### 🏬 Depósitos
 - Definición de múltiples depósitos o sucursales.
@@ -31,7 +30,7 @@ El sistema está pensado para ser escalable, multi-depósito y multi-proveedor, 
 - Transferencias entre depósitos con trazabilidad (salida + entrada vinculadas).
 
 ### 🚚 Proveedores
-- Registro de proveedores con datos básicos (nombre, contacto, moneda, plazo de pago).
+- Registro de proveedores con datos básicos (nombre, contacto, moneda,).
 - Asociación a múltiples productos (relación M:N).
 - Información de precios de compra, plazo de entrega y prioridad.
 
