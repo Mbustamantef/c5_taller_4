@@ -32,21 +32,14 @@ Doble mantenimiento: Cambios en entidades deben reflejarse en el repositorio.
  # 4. Aplicación en mi Proyecto
 
 Proyecto: Gestión Empresarial
-Entidad principal: Producto (con campos como nombre, precio_neto, precio_venta, cantidad, activo).
+Entidad principal:GenericRepository 
 
 Ejemplo de repositorio:
 
-import io.quarkus.hibernate.orm.panache.PanacheRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-import com.example.model.Producto;
+``` ```package core.generic;
 
-@ApplicationScoped
-public class ProductoRepository implements PanacheRepository<Producto> {
-public List<Producto> findByCategoria(String categoria) {
-return list("categoria", categoria);
+import io.quarkus.hibernate.orm.panache.PanacheRepositoryBase;
+
+public abstract class GenericRepository <I , ID > implements PanacheRepositoryBase<I , ID> {
+
 }
-}
-
-
-Uso:
-Se utiliza para gestionar productos, calcular precios según el dólar del día y mantener un acceso limpio a los datos.
