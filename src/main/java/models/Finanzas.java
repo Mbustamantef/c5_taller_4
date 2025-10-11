@@ -1,19 +1,26 @@
 package models;
 
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.util.Date;
 
 @Entity
+@Table(name = "finanzas", schema = "public")
 
 public class Finanzas {
   @Id
   @GeneratedValue
+  @Column(name = "id_finanzas", nullable = false)
   private long id_finanzas;
+  @Column(name = "ganancias", nullable = false)
   private double ganancias;
+  @Column(name = "perdidas", nullable = false)
   private double perdidas;
+  @Column(name = "mes", nullable = false)
   private Date mes;
 
   public long getId_finanzas() {
