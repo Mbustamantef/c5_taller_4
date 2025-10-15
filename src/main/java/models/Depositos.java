@@ -1,13 +1,10 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,30 +12,38 @@ import java.util.List;
 public class Depositos {
 
   @Id
-  @GeneratedValue
-  @Column(name= "id_deposito", updatable=false,nullable=false)
-  private long id_deposito;
-  @Column(name = "nombre_deposito", nullable = false)
-  private String nombre_deposito;
-  @OneToMany(mappedBy = "deposito", fetch = FetchType.LAZY)
-  private List<Responsables> responsables;
-  @ManyToMany(mappedBy = "depositos")
-  private List<Productos> productos;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_deposito", updatable = false, nullable = false)
+  private Long idDeposito;
 
-  public long getId_deposito() {
-    return id_deposito;
+  @NotNull(message = "El nombre del depósito es obligatorio")
+  @Size(min = 3, max = 150, message = "El nombre debe tener entre 3 y 150 caracteres")
+  @Column(name = "nombre_deposito", nullable = false, length = 150)
+  private String nombreDeposito;
+
+  @OneToMany(mappedBy = "deposito", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonbTransient
+  private List<Responsables> responsables = new ArrayList<>();
+
+  @ManyToMany(mappedBy = "depositos", fetch = FetchType.LAZY)
+  @JsonbTransient
+  private List<Productos> productos = new ArrayList<>();
+
+  // Getters and Setters
+  public Long getIdDeposito() {
+    return idDeposito;
   }
 
-  public void setId_deposito(long id_deposito) {
-    this.id_deposito = id_deposito;
+  public void setIdDeposito(Long idDeposito) {
+    this.idDeposito = idDeposito;
   }
 
-  public String getNombre_deposito() {
-    return nombre_deposito;
+  public String getNombreDeposito() {
+    return nombreDeposito;
   }
 
-  public void setNombre_deposito(String nombre_deposito) {
-    this.nombre_deposito = nombre_deposito;
+  public void setNombreDeposito(String nombreDeposito) {
+    this.nombreDeposito = nombreDeposito;
   }
 
   public List<Responsables> getResponsables() {

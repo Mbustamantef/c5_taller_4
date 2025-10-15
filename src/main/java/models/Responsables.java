@@ -1,39 +1,46 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "responsables", schema = "public")
 public class Responsables {
-  @Id
-  @GeneratedValue
-  @Column(name = "id_responsables", nullable = false)
-  private long id_responsables;
-  @Column(name = "nombre", nullable = false)
-  private String nombre;
-  @Column(name = "apellido", nullable = false)
-  private String apellido;
-  @OneToMany(mappedBy = "responsable", fetch = jakarta.persistence.FetchType.LAZY)
-  private List<Roles> roles;
 
-  @ManyToOne
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_responsables", nullable = false)
+  private Long idResponsables;
+
+  @NotNull(message = "El nombre del responsable es obligatorio")
+  @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+  @Column(name = "nombre", nullable = false, length = 100)
+  private String nombre;
+
+  @NotNull(message = "El apellido del responsable es obligatorio")
+  @Size(min = 2, max = 100, message = "El apellido debe tener entre 2 y 100 caracteres")
+  @Column(name = "apellido", nullable = false, length = 100)
+  private String apellido;
+
+  @OneToMany(mappedBy = "responsable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonbTransient
+  private List<Roles> roles = new ArrayList<>();
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_deposito")
   private Depositos deposito;
 
-  public long getId_responsables() {
-    return id_responsables;
+  // Getters and Setters
+  public Long getIdResponsables() {
+    return idResponsables;
   }
 
-  public void setId_responsables(long id_responsables) {
-    this.id_responsables = id_responsables;
+  public void setIdResponsables(Long idResponsables) {
+    this.idResponsables = idResponsables;
   }
 
   public String getNombre() {

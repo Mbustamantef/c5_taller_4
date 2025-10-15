@@ -1,49 +1,58 @@
 package models;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotNull;
 import java.util.Date;
 
 @Entity
 @Table(name = "finanzas", schema = "public")
-
 public class Finanzas {
+
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_finanzas", nullable = false)
-  private long id_finanzas;
+  private Long idFinanzas;
+
+  @NotNull(message = "Las ganancias son obligatorias")
+  @DecimalMin(value = "0.0", message = "Las ganancias no pueden ser negativas")
   @Column(name = "ganancias", nullable = false)
-  private double ganancias;
+  private Double ganancias;
+
+  @NotNull(message = "Las pérdidas son obligatorias")
+  @DecimalMin(value = "0.0", message = "Las pérdidas no pueden ser negativas")
   @Column(name = "perdidas", nullable = false)
-  private double perdidas;
+  private Double perdidas;
+
+  @NotNull(message = "La fecha es obligatoria")
+  @Temporal(TemporalType.DATE)
   @Column(name = "mes", nullable = false)
+  @JsonbDateFormat("yyyy-MM-dd")
   private Date mes;
 
-  public long getId_finanzas() {
-    return id_finanzas;
+  // Getters and Setters
+  public Long getIdFinanzas() {
+    return idFinanzas;
   }
 
-  public void setId_finanzas(long id_finanzas) {
-    this.id_finanzas = id_finanzas;
+  public void setIdFinanzas(Long idFinanzas) {
+    this.idFinanzas = idFinanzas;
   }
 
-  public double getGanancias() {
+  public Double getGanancias() {
     return ganancias;
   }
 
-  public void setGanancias(double ganancias) {
+  public void setGanancias(Double ganancias) {
     this.ganancias = ganancias;
   }
 
-  public double getPerdidas() {
+  public Double getPerdidas() {
     return perdidas;
   }
 
-  public void setPerdidas(double perdidas) {
+  public void setPerdidas(Double perdidas) {
     this.perdidas = perdidas;
   }
 

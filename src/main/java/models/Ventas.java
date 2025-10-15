@@ -1,38 +1,55 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "ventas",schema = "public")
+@Table(name = "ventas", schema = "public")
 public class Ventas {
+
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_ventas", nullable = false)
-  private long id_ventas;
-  @OneToMany(mappedBy = "venta", fetch = jakarta.persistence.FetchType.LAZY)
-  private List<Clientes> clientes;
-  @OneToMany(mappedBy = "venta", fetch = jakarta.persistence.FetchType.LAZY)
-  private List<Productos> productos;
+  private Long idVentas;
+
+  @OneToMany(mappedBy = "venta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonbTransient
+  private List<Clientes> clientes = new ArrayList<>();
+
+  @OneToMany(mappedBy = "venta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonbTransient
+  private List<Productos> productos = new ArrayList<>();
+
+  @NotNull(message = "El monto es obligatorio")
+  @DecimalMin(value = "0.0", inclusive = false, message = "El monto debe ser mayor a 0")
   @Column(name = "monto", nullable = false)
-  private float monto;
+  private Float monto;
+
+  @NotNull(message = "La cantidad es obligatoria")
+  @Min(value = 1, message = "La cantidad debe ser al menos 1")
   @Column(name = "cantidad", nullable = false)
-  private int cantidad;
+  private Integer cantidad;
+
+  @NotNull(message = "La fecha es obligatoria")
+  @Temporal(TemporalType.DATE)
   @Column(name = "mes", nullable = false)
+  @JsonbDateFormat("yyyy-MM-dd")
   private Date mes;
 
-  public long getId_ventas() {
-    return id_ventas;
+  // Getters and Setters
+  public Long getIdVentas() {
+    return idVentas;
   }
 
-  public void setId_ventas(long id_ventas) {
-    this.id_ventas = id_ventas;
+  public void setIdVentas(Long idVentas) {
+    this.idVentas = idVentas;
   }
 
   public List<Clientes> getClientes() {
@@ -51,19 +68,19 @@ public class Ventas {
     this.productos = productos;
   }
 
-  public float getMonto() {
+  public Float getMonto() {
     return monto;
   }
 
-  public void setMonto(float monto) {
+  public void setMonto(Float monto) {
     this.monto = monto;
   }
 
-  public int getCantidad() {
+  public Integer getCantidad() {
     return cantidad;
   }
 
-  public void setCantidad(int cantidad) {
+  public void setCantidad(Integer cantidad) {
     this.cantidad = cantidad;
   }
 

@@ -1,71 +1,82 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "clientes" ,schema = "public")
+@Table(name = "clientes", schema = "public")
 public class Clientes {
-  @Id
-  @GeneratedValue
-  @Column(name = "id_cliente",nullable = false)
-  private long id_cliente;
-  @Column(name = "nombre_cliente",nullable = false)
-  private String nombre_cliente;
-  @Column(name = "apellido_cliente",nullable = false)
-  private String apellido_cliente;
-  @Column(name = "ci_cliente",nullable = false)
-  private String ci_cliente;
-  @Column(name = "correo_cliente",nullable = false)
-  private String correo_cliente;
 
-  @ManyToOne
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id_cliente", nullable = false)
+  private Long idCliente;
+
+  @NotNull(message = "El nombre del cliente es obligatorio")
+  @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
+  @Column(name = "nombre_cliente", nullable = false, length = 100)
+  private String nombreCliente;
+
+  @NotNull(message = "El apellido del cliente es obligatorio")
+  @Size(min = 2, max = 100, message = "El apellido debe tener entre 2 y 100 caracteres")
+  @Column(name = "apellido_cliente", nullable = false, length = 100)
+  private String apellidoCliente;
+
+  @NotNull(message = "El CI del cliente es obligatorio")
+  @Size(min = 5, max = 20, message = "El CI debe tener entre 5 y 20 caracteres")
+  @Column(name = "ci_cliente", nullable = false, unique = true, length = 20)
+  private String ciCliente;
+
+  @NotNull(message = "El correo del cliente es obligatorio")
+  @Email(message = "El correo debe ser válido")
+  @Column(name = "correo_cliente", nullable = false, unique = true, length = 150)
+  private String correoCliente;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_ventas")
   private Ventas venta;
 
-  public long getId_cliente() {
-    return id_cliente;
+  // Getters and Setters
+  public Long getIdCliente() {
+    return idCliente;
   }
 
-  public void setId_cliente(long id_cliente) {
-    this.id_cliente = id_cliente;
+  public void setIdCliente(Long idCliente) {
+    this.idCliente = idCliente;
   }
 
-  public String getNombre_cliente() {
-    return nombre_cliente;
+  public String getNombreCliente() {
+    return nombreCliente;
   }
 
-  public void setNombre_cliente(String nombre_cliente) {
-    this.nombre_cliente = nombre_cliente;
+  public void setNombreCliente(String nombreCliente) {
+    this.nombreCliente = nombreCliente;
   }
 
-  public String getApellido_cliente() {
-    return apellido_cliente;
+  public String getApellidoCliente() {
+    return apellidoCliente;
   }
 
-  public void setApellido_cliente(String apellido_cliente) {
-    this.apellido_cliente = apellido_cliente;
+  public void setApellidoCliente(String apellidoCliente) {
+    this.apellidoCliente = apellidoCliente;
   }
 
-  public String getCi_cliente() {
-    return ci_cliente;
+  public String getCiCliente() {
+    return ciCliente;
   }
 
-  public void setCi_cliente(String ci_cliente) {
-    this.ci_cliente = ci_cliente;
+  public void setCiCliente(String ciCliente) {
+    this.ciCliente = ciCliente;
   }
 
-  public String getCorreo_cliente() {
-    return correo_cliente;
+  public String getCorreoCliente() {
+    return correoCliente;
   }
 
-  public void setCorreo_cliente(String correo_cliente) {
-    this.correo_cliente = correo_cliente;
+  public void setCorreoCliente(String correoCliente) {
+    this.correoCliente = correoCliente;
   }
 
   public Ventas getVenta() {
