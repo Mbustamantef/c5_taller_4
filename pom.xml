@@ -51,6 +51,12 @@
 
     <dependency>
       <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-smallrye-openapi</artifactId>
+    </dependency>
+
+
+    <dependency>
+      <groupId>io.quarkus</groupId>
       <artifactId>quarkus-rest-jsonb</artifactId>
     </dependency>
     <dependency>
@@ -60,6 +66,10 @@
     <dependency>
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-swagger-ui</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-validator</artifactId>
     </dependency>
     <dependency>
       <groupId>io.quarkus</groupId>

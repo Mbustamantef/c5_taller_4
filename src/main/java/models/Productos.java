@@ -1,16 +1,10 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -19,42 +13,74 @@ import java.util.List;
 public class Productos {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_producto", nullable = false)
-  private long id_producto;
-  @Column(name = "titulo", nullable = false)
+  private Long idProducto;
+
+  @NotNull(message = "El título del producto es obligatorio")
+  @Size(min = 3, max = 200, message = "El título debe tener entre 3 y 200 caracteres")
+  @Column(name = "titulo", nullable = false, length = 200)
   private String titulo;
+
+  @NotNull(message = "El precio de costo es obligatorio")
+  @DecimalMin(value = "0.0", inclusive = false, message = "El precio de costo debe ser mayor a 0")
   @Column(name = "precio_costo", nullable = false)
-  private float precio_costo;
+  private Float precioCosto;
+
+  @NotNull(message = "El precio de venta es obligatorio")
+  @DecimalMin(value = "0.0", inclusive = false, message = "El precio de venta debe ser mayor a 0")
   @Column(name = "precio_venta", nullable = false)
-  private float precio_venta;
+  private Float precioVenta;
+
+  @NotNull(message = "La cantidad es obligatoria")
+  @Min(value = 0, message = "La cantidad no puede ser negativa")
   @Column(name = "cantidad", nullable = false)
-  private int cantidad;
-  @Column(name = "categoria", nullable = false)
+  private Integer cantidad;
+
+  @NotNull(message = "La categoría es obligatoria")
+  @Size(min = 3, max = 100, message = "La categoría debe tener entre 3 y 100 caracteres")
+  @Column(name = "categoria", nullable = false, length = 100)
   private String categoria;
-  @ManyToMany
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
     name = "productos_proveedores",
     joinColumns = @JoinColumn(name = "id_producto"),
     inverseJoinColumns = @JoinColumn(name = "id_proveedor")
   )
-  private List<Proveedores> proveedores;
+  @JsonbTransient
+  private List<Proveedores> proveedores = new ArrayList<>();
+
+  @NotNull(message = "El estado activo es obligatorio")
   @Column(name = "activo", nullable = false)
   private Boolean activo;
-  @ManyToMany
-  private List<Depositos> depositos;
+
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+    name = "productos_depositos",
+    joinColumns = @JoinColumn(name = "id_producto"),
+    inverseJoinColumns = @JoinColumn(name = "id_deposito")
+  )
+  @JsonbTransient
+  private List<Depositos> depositos = new ArrayList<>();
+
+  @NotNull(message = "La fecha de compra es obligatoria")
+  @Temporal(TemporalType.DATE)
   @Column(name = "mes_compra", nullable = false)
-  private Date mes_compra;
-  @ManyToOne
+  @JsonbDateFormat("yyyy-MM-dd")
+  private Date mesCompra;
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_ventas")
   private Ventas venta;
 
-  public long getId_producto() {
-    return id_producto;
+  // Getters and Setters
+  public Long getIdProducto() {
+    return idProducto;
   }
 
-  public void setId_producto(long id_producto) {
-    this.id_producto = id_producto;
+  public void setIdProducto(Long idProducto) {
+    this.idProducto = idProducto;
   }
 
   public String getTitulo() {
@@ -65,27 +91,27 @@ public class Productos {
     this.titulo = titulo;
   }
 
-  public float getPrecio_costo() {
-    return precio_costo;
+  public Float getPrecioCosto() {
+    return precioCosto;
   }
 
-  public void setPrecio_costo(float precio_costo) {
-    this.precio_costo = precio_costo;
+  public void setPrecioCosto(Float precioCosto) {
+    this.precioCosto = precioCosto;
   }
 
-  public float getPrecio_venta() {
-    return precio_venta;
+  public Float getPrecioVenta() {
+    return precioVenta;
   }
 
-  public void setPrecio_venta(float precio_venta) {
-    this.precio_venta = precio_venta;
+  public void setPrecioVenta(Float precioVenta) {
+    this.precioVenta = precioVenta;
   }
 
-  public int getCantidad() {
+  public Integer getCantidad() {
     return cantidad;
   }
 
-  public void setCantidad(int cantidad) {
+  public void setCantidad(Integer cantidad) {
     this.cantidad = cantidad;
   }
 
@@ -105,12 +131,12 @@ public class Productos {
     this.activo = activo;
   }
 
-  public Date getMes_compra() {
-    return mes_compra;
+  public Date getMesCompra() {
+    return mesCompra;
   }
 
-  public void setMes_compra(Date mes_compra) {
-    this.mes_compra = mes_compra;
+  public void setMesCompra(Date mesCompra) {
+    this.mesCompra = mesCompra;
   }
 
   public List<Proveedores> getProveedores() {

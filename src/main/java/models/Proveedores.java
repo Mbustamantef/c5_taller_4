@@ -1,12 +1,10 @@
 package models;
 
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -15,28 +13,47 @@ import java.util.List;
 public class Proveedores {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_proveedor", nullable = false)
-  private long id_proveedor;
-  @Column(name = "titulo", nullable = false)
+  private Long idProveedor;
+
+  @NotNull(message = "El título es obligatorio")
+  @Size(min = 3, max = 200, message = "El título debe tener entre 3 y 200 caracteres")
+  @Column(name = "titulo", nullable = false, length = 200)
   private String titulo;
+
+  @NotNull(message = "El costo es obligatorio")
+  @DecimalMin(value = "0.0", inclusive = false, message = "El costo debe ser mayor a 0")
   @Column(name = "costo", nullable = false)
   private Float costo;
-  @Column(name = "cantidad", nullable = false)
-  private int cantidad;
-  @Column(name = "moneda", nullable = false)
-  private String moneda;
-  @Column(name = "mes_compra", nullable = false)
-  private Date mes_compra;
-  @ManyToMany(mappedBy = "proveedores")
-  private List<Productos> productos;
 
-  public long getId_proveedor() {
-    return id_proveedor;
+  @NotNull(message = "La cantidad es obligatoria")
+  @Min(value = 0, message = "La cantidad no puede ser negativa")
+  @Column(name = "cantidad", nullable = false)
+  private Integer cantidad;
+
+  @NotNull(message = "La moneda es obligatoria")
+  @Size(min = 2, max = 10, message = "La moneda debe tener entre 2 y 10 caracteres")
+  @Column(name = "moneda", nullable = false, length = 10)
+  private String moneda;
+
+  @NotNull(message = "La fecha de compra es obligatoria")
+  @Temporal(TemporalType.DATE)
+  @Column(name = "mes_compra", nullable = false)
+  @JsonbDateFormat("yyyy-MM-dd")
+  private Date mesCompra;
+
+  @ManyToMany(mappedBy = "proveedores", fetch = FetchType.LAZY)
+  @JsonbTransient
+  private List<Productos> productos = new ArrayList<>();
+
+  // Getters and Setters
+  public Long getIdProveedor() {
+    return idProveedor;
   }
 
-  public void setId_proveedor(long id_proveedor) {
-    this.id_proveedor = id_proveedor;
+  public void setIdProveedor(Long idProveedor) {
+    this.idProveedor = idProveedor;
   }
 
   public String getTitulo() {
@@ -55,11 +72,11 @@ public class Proveedores {
     this.costo = costo;
   }
 
-  public int getCantidad() {
+  public Integer getCantidad() {
     return cantidad;
   }
 
-  public void setCantidad(int cantidad) {
+  public void setCantidad(Integer cantidad) {
     this.cantidad = cantidad;
   }
 
@@ -71,12 +88,12 @@ public class Proveedores {
     this.moneda = moneda;
   }
 
-  public Date getMes_compra() {
-    return mes_compra;
+  public Date getMesCompra() {
+    return mesCompra;
   }
 
-  public void setMes_compra(Date mes_compra) {
-    this.mes_compra = mes_compra;
+  public void setMesCompra(Date mesCompra) {
+    this.mesCompra = mesCompra;
   }
 
   public List<Productos> getProductos() {

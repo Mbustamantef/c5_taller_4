@@ -1,33 +1,34 @@
 package models;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "roles", schema = "public")
 public class Roles {
 
   @Id
-  @GeneratedValue
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_rol", nullable = false)
-  private long id_rol;
-  @Column(name = "descripcion", nullable = false)
+  private Long idRol;
+
+  @NotNull(message = "La descripción del rol es obligatoria")
+  @Size(min = 3, max = 100, message = "La descripción debe tener entre 3 y 100 caracteres")
+  @Column(name = "descripcion", nullable = false, length = 100)
   private String descripcion;
-  @ManyToOne
+
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_responsables")
   private Responsables responsable;
 
-  public long getId_rol() {
-    return id_rol;
+  // Getters and Setters
+  public Long getIdRol() {
+    return idRol;
   }
 
-  public void setId_rol(long id_rol) {
-    this.id_rol = id_rol;
+  public void setIdRol(Long idRol) {
+    this.idRol = idRol;
   }
 
   public String getDescripcion() {
