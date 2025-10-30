@@ -4,6 +4,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import java.util.Date;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 @Schema(description = "DTO para transferencia de datos de Venta")
@@ -25,7 +26,38 @@ public class VentaDTO {
   @NotNull(message = "La fecha es obligatoria")
   @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "La fecha debe tener el formato yyyy-MM-dd")
   @Schema(description = "Fecha de la venta", example = "2025-10-15", required = true)
-  private String mes;
+  private Date mes;
+
+  @NotNull(message = "El id del producto es obligatorio")
+  @Min(value = 1, message = "El id del producto debe ser al menos 1")
+  @Schema(description = "Cantidad de productos vendidos", example = "10", required = true)
+  private Integer id_producto;
+
+  @NotNull(message = "El id del cliente")
+  @Min(value = 1, message = "El id del cliente debe ser al menos 1")
+  @Schema(description = "id del cliente", example = "10", required = true)
+  private Integer id_cliente;
+
+
+  public void setMes(Date mes) {
+    this.mes = mes;
+  }
+
+  public Integer getId_producto() {
+    return id_producto;
+  }
+
+  public void setId_producto(Integer id_producto) {
+    this.id_producto = id_producto;
+  }
+
+  public Integer getId_cliente() {
+    return id_cliente;
+  }
+
+  public void setId_cliente(Integer id_cliente) {
+    this.id_cliente = id_cliente;
+  }
 
   public VentaDTO() {
   }
@@ -54,11 +86,4 @@ public class VentaDTO {
     this.cantidad = cantidad;
   }
 
-  public String getMes() {
-    return mes;
-  }
-
-  public void setMes(String mes) {
-    this.mes = mes;
-  }
 }

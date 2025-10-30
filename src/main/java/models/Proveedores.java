@@ -22,6 +22,11 @@ public class Proveedores {
   @Column(name = "titulo", nullable = false, length = 200)
   private String titulo;
 
+  @NotNull(message = "El nombre del proveedor es obligatorio")
+  @Size(min = 3, max = 255, message = "El nombre del proveedor debe tener entre 3 y 255 caracteres")
+  @Column(name = "nombre_proveedor", nullable = false, length = 255)
+  private String nombreProveedor;
+
   @NotNull(message = "El costo es obligatorio")
   @DecimalMin(value = "0.0", inclusive = false, message = "El costo debe ser mayor a 0")
   @Column(name = "costo", nullable = false)
@@ -62,6 +67,14 @@ public class Proveedores {
 
   public void setTitulo(String titulo) {
     this.titulo = titulo;
+  }
+
+  public String getNombreProveedor() {
+    return nombreProveedor;
+  }
+
+  public void setNombreProveedor(String nombreProveedor) {
+    this.nombreProveedor = nombreProveedor;
   }
 
   public Float getCosto() {

@@ -23,7 +23,18 @@ public class ResponsableDTO {
   @Schema(description = "ID del depósito asociado", example = "1")
   private Long id_deposito;
 
+  @Schema(description = "ID del rol ", example = "1")
+  private Long rol;
+
   public ResponsableDTO() {
+  }
+
+  public Long getRol() {
+    return rol;
+  }
+
+  public void setRol(Long rol) {
+    this.rol = rol;
   }
 
   public Long getId_responsables() {

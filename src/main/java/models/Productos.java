@@ -64,15 +64,16 @@ public class Productos {
   @JsonbTransient
   private List<Depositos> depositos = new ArrayList<>();
 
+  @ManyToMany(mappedBy = "productos", fetch = FetchType.LAZY)
+  @JsonbTransient
+  private List<Ventas> ventas = new ArrayList<>();
+
   @NotNull(message = "La fecha de compra es obligatoria")
   @Temporal(TemporalType.DATE)
   @Column(name = "mes_compra", nullable = false)
   @JsonbDateFormat("yyyy-MM-dd")
   private Date mesCompra;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_ventas")
-  private Ventas venta;
 
   // Getters and Setters
   public Long getIdProducto() {
@@ -155,11 +156,11 @@ public class Productos {
     this.depositos = depositos;
   }
 
-  public Ventas getVenta() {
-    return venta;
+  public List<Ventas> getVentas() {
+    return ventas;
   }
 
-  public void setVenta(Ventas venta) {
-    this.venta = venta;
+  public void setVentas(List<Ventas> ventas) {
+    this.ventas = ventas;
   }
 }

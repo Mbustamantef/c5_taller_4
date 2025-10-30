@@ -45,6 +45,7 @@ public class ProveedoresService {
 
     Proveedores proveedor = existing.get();
     proveedor.setTitulo(dto.getTitulo());
+    proveedor.setNombreProveedor(dto.getNombreProveedor());
     proveedor.setCosto(dto.getCosto());
     proveedor.setCantidad(dto.getCantidad());
     proveedor.setMoneda(dto.getMoneda());
@@ -69,6 +70,7 @@ public class ProveedoresService {
     ProveedorDTO dto = new ProveedorDTO();
     dto.setId_proveedor(proveedor.getIdProveedor());
     dto.setTitulo(proveedor.getTitulo());
+    dto.setNombreProveedor(proveedor.getNombreProveedor());
     dto.setCosto(proveedor.getCosto());
     dto.setCantidad(proveedor.getCantidad());
     dto.setMoneda(proveedor.getMoneda());
@@ -81,6 +83,7 @@ public class ProveedoresService {
   private Proveedores toEntity(ProveedorDTO dto) {
     Proveedores proveedor = new Proveedores();
     proveedor.setTitulo(dto.getTitulo());
+    proveedor.setNombreProveedor(dto.getNombreProveedor());
     proveedor.setCosto(dto.getCosto());
     proveedor.setCantidad(dto.getCantidad());
     proveedor.setMoneda(dto.getMoneda());

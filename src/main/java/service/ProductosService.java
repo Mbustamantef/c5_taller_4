@@ -64,14 +64,6 @@ public class ProductosService {
         throw new RuntimeException("Formato de fecha inválido. Use yyyy-MM-dd");
       }
     }
-
-    if (dto.getId_ventas() != null) {
-      Ventas venta = ventasRepository.findById(dto.getId_ventas());
-      producto.setVenta(venta);
-    } else {
-      producto.setVenta(null);
-    }
-
     return Optional.of(toDTO(producto));
   }
 
@@ -91,9 +83,6 @@ public class ProductosService {
     if (producto.getMesCompra() != null) {
       dto.setMes_compra(dateFormat.format(producto.getMesCompra()));
     }
-    if (producto.getVenta() != null) {
-      dto.setId_ventas(producto.getVenta().getIdVentas());
-    }
     return dto;
   }
 
@@ -105,7 +94,6 @@ public class ProductosService {
     producto.setCantidad(dto.getCantidad());
     producto.setCategoria(dto.getCategoria());
     producto.setActivo(dto.getActivo());
-
     if (dto.getMes_compra() != null) {
       try {
         Date mesCompra = dateFormat.parse(dto.getMes_compra());
@@ -114,12 +102,6 @@ public class ProductosService {
         throw new RuntimeException("Formato de fecha inválido. Use yyyy-MM-dd");
       }
     }
-
-    if (dto.getId_ventas() != null) {
-      Ventas venta = ventasRepository.findById(dto.getId_ventas());
-      producto.setVenta(venta);
-    }
-
     return producto;
   }
 }

@@ -23,7 +23,12 @@ public class Ventas {
   @JsonbTransient
   private List<Clientes> clientes = new ArrayList<>();
 
-  @OneToMany(mappedBy = "venta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(
+    name = "ventas_productos",
+    joinColumns = @JoinColumn(name = "id_ventas"),
+    inverseJoinColumns = @JoinColumn(name = "id_producto")
+  )
   @JsonbTransient
   private List<Productos> productos = new ArrayList<>();
 

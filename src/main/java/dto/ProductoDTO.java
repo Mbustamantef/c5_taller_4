@@ -43,10 +43,20 @@ public class ProductoDTO {
   @Schema(description = "Fecha de compra del producto", example = "2025-10-15", required = true)
   private String mes_compra;
 
-  @Schema(description = "ID de la venta asociada", example = "1")
-  private Long id_ventas;
+  @NotNull(message = "La cantidad es obligatoria")
+  @Min(value = 0, message = "La cantidad no puede ser negativa")
+  @Schema(description = "Inserte el deposito correspondiente", example = "50", required = true)
+  private Integer id_deposito;
 
   public ProductoDTO() {
+  }
+
+  public Integer getId_deposito() {
+    return id_deposito;
+  }
+
+  public void setId_deposito(Integer id_deposito) {
+    this.id_deposito = id_deposito;
   }
 
   public Long getId_producto() {
@@ -111,13 +121,5 @@ public class ProductoDTO {
 
   public void setMes_compra(String mes_compra) {
     this.mes_compra = mes_compra;
-  }
-
-  public Long getId_ventas() {
-    return id_ventas;
-  }
-
-  public void setId_ventas(Long id_ventas) {
-    this.id_ventas = id_ventas;
   }
 }

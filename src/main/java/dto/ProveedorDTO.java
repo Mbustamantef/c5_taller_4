@@ -11,8 +11,13 @@ public class ProveedorDTO {
 
   @NotNull(message = "El título es obligatorio")
   @Size(min = 3, max = 200, message = "El título debe tener entre 3 y 200 caracteres")
-  @Schema(description = "Nombre del proveedor", example = "Tech Suppliers S.A.", required = true)
+  @Schema(description = "Título del producto/servicio", example = "Laptop HP", required = true)
   private String titulo;
+
+  @NotNull(message = "El nombre del proveedor es obligatorio")
+  @Size(min = 3, max = 255, message = "El nombre del proveedor debe tener entre 3 y 255 caracteres")
+  @Schema(description = "Nombre del proveedor", example = "Tech Suppliers S.A.", required = true)
+  private String nombreProveedor;
 
   @NotNull(message = "El costo es obligatorio")
   @DecimalMin(value = "0.01", message = "El costo debe ser mayor a 0")
@@ -51,6 +56,14 @@ public class ProveedorDTO {
 
   public void setTitulo(String titulo) {
     this.titulo = titulo;
+  }
+
+  public String getNombreProveedor() {
+    return nombreProveedor;
+  }
+
+  public void setNombreProveedor(String nombreProveedor) {
+    this.nombreProveedor = nombreProveedor;
   }
 
   public Float getCosto() {

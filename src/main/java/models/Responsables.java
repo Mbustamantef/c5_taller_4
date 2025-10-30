@@ -26,9 +26,10 @@ public class Responsables {
   @Column(name = "apellido", nullable = false, length = 100)
   private String apellido;
 
-  @OneToMany(mappedBy = "responsable", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JsonbTransient
-  private List<Roles> roles = new ArrayList<>();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_rol") // foreign key column in responsables table
+  private Roles rol;
+
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_deposito")
@@ -59,12 +60,12 @@ public class Responsables {
     this.apellido = apellido;
   }
 
-  public List<Roles> getRoles() {
-    return roles;
+  public Roles getRol() {
+    return rol;
   }
 
-  public void setRoles(List<Roles> roles) {
-    this.roles = roles;
+  public void setRol(Roles rol) {
+    this.rol = rol;
   }
 
   public Depositos getDeposito() {

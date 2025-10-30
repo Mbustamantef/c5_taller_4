@@ -18,9 +18,6 @@ public class Roles {
   @Column(name = "descripcion", nullable = false, length = 100)
   private String descripcion;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_responsables")
-  private Responsables responsable;
 
   // Getters and Setters
   public Long getIdRol() {
@@ -39,11 +36,4 @@ public class Roles {
     this.descripcion = descripcion;
   }
 
-  public Responsables getResponsable() {
-    return responsable;
-  }
-
-  public void setResponsable(Responsables responsable) {
-    this.responsable = responsable;
-  }
 }

@@ -1,5 +1,7 @@
 package dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -8,6 +10,7 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class RolDTO {
 
   @Schema(description = "ID del rol", example = "1", readOnly = true)
+  @JsonbTransient
   private Long id_rol;
 
   @NotNull(message = "La descripción del rol es obligatoria")
