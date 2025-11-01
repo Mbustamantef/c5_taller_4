@@ -72,6 +72,24 @@ services:
     networks:
       - devnet
 
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taller4_app
+    restart: on-failure
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/proyectosdb
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin123
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8081:8080"
+    depends_on:
+      - postgres
+    networks:
+      - devnet
+
 networks:
   devnet:
 

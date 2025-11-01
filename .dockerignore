@@ -1,5 +1,14 @@
-*
-!target/*-runner
-!target/*-runner.jar
-!target/lib/*
-!target/quarkus-app/*
+# Ignore build artifacts and IDE files but keep project sources and build wrappers
+target/
+**/target/
+.git
+.vscode
+.idea
+.DS_Store
+
+# Keep necessary build files
+!pom.xml
+!mvnw
+!.mvn/
+!src/
+
