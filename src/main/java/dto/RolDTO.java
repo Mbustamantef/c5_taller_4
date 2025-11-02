@@ -1,7 +1,6 @@
 package dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.json.bind.annotation.JsonbTransient;
+import jakarta.json.bind.annotation.JsonbProperty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -10,8 +9,8 @@ import org.eclipse.microprofile.openapi.annotations.media.Schema;
 public class RolDTO {
 
   @Schema(description = "ID del rol", example = "1", readOnly = true)
-  @JsonbTransient
-  private Long id_rol;
+  @JsonbProperty("id_rol")
+  private Long idRol;
 
   @NotNull(message = "La descripción del rol es obligatoria")
   @Size(min = 3, max = 100, message = "La descripción debe tener entre 3 y 100 caracteres")
@@ -21,12 +20,12 @@ public class RolDTO {
   public RolDTO() {
   }
 
-  public Long getId_rol() {
-    return id_rol;
+  public Long getIdRol() {
+    return idRol;
   }
 
-  public void setId_rol(Long id_rol) {
-    this.id_rol = id_rol;
+  public void setIdRol(Long idRol) {
+    this.idRol = idRol;
   }
 
   public String getDescripcion() {

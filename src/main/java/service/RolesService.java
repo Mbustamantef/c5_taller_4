@@ -51,7 +51,7 @@ public class RolesService {
 
   private RolDTO toDTO(Roles rol) {
     RolDTO dto = new RolDTO();
-    dto.setId_rol(rol.getIdRol());
+    dto.setIdRol(rol.getIdRol());
     dto.setDescripcion(rol.getDescripcion());
     return dto;
   }
