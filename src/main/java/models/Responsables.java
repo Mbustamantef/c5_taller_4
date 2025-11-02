@@ -27,9 +27,8 @@ public class Responsables {
   private String apellido;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_rol") // foreign key column in responsables table
+  @JoinColumn(name = "id_rol")
   private Roles rol;
-
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_deposito")
