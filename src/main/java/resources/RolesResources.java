@@ -28,8 +28,7 @@ public class RolesResources {
   @GET
   @Operation(summary = "Listar todos los roles", description = "Obtiene una lista de todos los roles registrados")
   @APIResponses(value = {
-    @APIResponse(responseCode = "200", description = "Lista de roles obtenida exitosamente")
-  })
+      @APIResponse(responseCode = "200", description = "Lista de roles obtenida exitosamente")})
   public Response listAll() {
     List<RolDTO> roles = rolesService.findAll();
     return Response.ok(ApiResponse.success("Roles obtenidos exitosamente", roles)).build();
@@ -38,37 +37,31 @@ public class RolesResources {
   @GET
   @Path("{id}")
   @Operation(summary = "Obtener rol por ID", description = "Obtiene un rol específico por su ID")
-  @APIResponses(value = {
-    @APIResponse(responseCode = "200", description = "Rol encontrado"),
-    @APIResponse(responseCode = "404", description = "Rol no encontrado")
-  })
+  @APIResponses(value = {@APIResponse(responseCode = "200", description = "Rol encontrado"),
+      @APIResponse(responseCode = "404", description = "Rol no encontrado")})
   public Response getById(@PathParam("id") Long id) {
     Optional<RolDTO> rol = rolesService.findById(id);
     if (rol.isPresent()) {
       return Response.ok(ApiResponse.success("Rol encontrado", rol.get())).build();
     }
     return Response.status(Response.Status.NOT_FOUND)
-        .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id))
-        .build();
+        .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id)).build();
   }
 
   @POST
   @Transactional
   @Operation(summary = "Crear un nuevo rol", description = "Registra un nuevo rol en el sistema")
   @APIResponses(value = {
-    @APIResponse(responseCode = "201", description = "Rol creado exitosamente"),
-    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")
-  })
+      @APIResponse(responseCode = "201", description = "Rol creado exitosamente"),
+      @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")})
   public Response create(@Valid RolDTO rolDTO) {
     try {
       RolDTO created = rolesService.create(rolDTO);
       return Response.status(Response.Status.CREATED)
-          .entity(ApiResponse.created("Rol creado exitosamente", created))
-          .build();
+          .entity(ApiResponse.created("Rol creado exitosamente", created)).build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)
-          .entity(ApiResponse.badRequest("Error al crear rol: " + e.getMessage()))
-          .build();
+          .entity(ApiResponse.badRequest("Error al crear rol: " + e.getMessage())).build();
     }
   }
 
@@ -77,23 +70,21 @@ public class RolesResources {
   @Transactional
   @Operation(summary = "Actualizar un rol", description = "Actualiza los datos de un rol existente")
   @APIResponses(value = {
-    @APIResponse(responseCode = "200", description = "Rol actualizado exitosamente"),
-    @APIResponse(responseCode = "404", description = "Rol no encontrado"),
-    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")
-  })
+      @APIResponse(responseCode = "200", description = "Rol actualizado exitosamente"),
+      @APIResponse(responseCode = "404", description = "Rol no encontrado"),
+      @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")})
   public Response update(@PathParam("id") Long id, @Valid RolDTO rolDTO) {
     try {
       Optional<RolDTO> updated = rolesService.update(id, rolDTO);
       if (updated.isPresent()) {
-        return Response.ok(ApiResponse.success("Rol actualizado exitosamente", updated.get())).build();
+        return Response.ok(ApiResponse.success("Rol actualizado exitosamente", updated.get()))
+            .build();
       }
       return Response.status(Response.Status.NOT_FOUND)
-          .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id))
-          .build();
+          .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id)).build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)
-          .entity(ApiResponse.badRequest("Error al actualizar rol: " + e.getMessage()))
-          .build();
+          .entity(ApiResponse.badRequest("Error al actualizar rol: " + e.getMessage())).build();
     }
   }
 
@@ -102,16 +93,14 @@ public class RolesResources {
   @Transactional
   @Operation(summary = "Eliminar un rol", description = "Elimina un rol del sistema")
   @APIResponses(value = {
-    @APIResponse(responseCode = "200", description = "Rol eliminado exitosamente"),
-    @APIResponse(responseCode = "404", description = "Rol no encontrado")
-  })
+      @APIResponse(responseCode = "200", description = "Rol eliminado exitosamente"),
+      @APIResponse(responseCode = "404", description = "Rol no encontrado")})
   public Response delete(@PathParam("id") Long id) {
     boolean deleted = rolesService.delete(id);
     if (deleted) {
       return Response.ok(ApiResponse.success("Rol eliminado exitosamente", null)).build();
     }
     return Response.status(Response.Status.NOT_FOUND)
-        .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id))
-        .build();
+        .entity(ApiResponse.notFound("Rol no encontrado con ID: " + id)).build();
   }
 }

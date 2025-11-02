@@ -18,7 +18,7 @@ public class Usuarios {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id_usuario")
-  private int idUsuario;
+  private Long idUsuario;
 
   @NotNull(message = "El nombre del Usuario es obligatorio")
   @Size(min = 2, max = 100, message = "El nombre debe tener entre 2 y 100 caracteres")
@@ -34,11 +34,11 @@ public class Usuarios {
   @JoinColumn(name = "id_rol")
   private Roles rol;
 
-  public int getIdUsuario() {
+  public Long getIdUsuario() {
     return idUsuario;
   }
 
-  public void setIdUsuario(int idUsuario) {
+  public void setIdUsuario(Long idUsuario) {
     this.idUsuario = idUsuario;
   }
 

@@ -23,4 +23,27 @@ public class UsuariosDTO {
   @Schema(description = "ID del rol", example = "1", readOnly = true)
   private Long id_rol;
 
+  public String getNombreUsuario() {
+    return nombreUsuario;
+  }
+
+  public void setNombreUsuario(String nombreUsuario) {
+    this.nombreUsuario = nombreUsuario;
+  }
+
+  public String getContrasena() {
+    return contrasena;
+  }
+
+  public void setContrasena(String contrasena) {
+    this.contrasena = contrasena;
+  }
+
+  public Long getId_rol() {
+    return id_rol;
+  }
+
+  public void setId_rol(Long id_rol) {
+    this.id_rol = id_rol;
+  }
 }
