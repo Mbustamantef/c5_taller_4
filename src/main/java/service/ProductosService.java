@@ -4,9 +4,7 @@ import dto.ProductoDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import models.Productos;
-import models.Ventas;
 import repository.ProductosRepository;
-import repository.VentasRepository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,9 +17,6 @@ public class ProductosService {
 
   @Inject
   ProductosRepository productosRepository;
-
-  @Inject
-  VentasRepository ventasRepository;
 
   private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -64,6 +59,7 @@ public class ProductosService {
         throw new RuntimeException("Formato de fecha inválido. Use yyyy-MM-dd");
       }
     }
+
     return Optional.of(toDTO(producto));
   }
 
@@ -83,6 +79,21 @@ public class ProductosService {
     if (producto.getMesCompra() != null) {
       dto.setMes_compra(dateFormat.format(producto.getMesCompra()));
     }
+
+    // Incluir información de depósitos
+    if (producto.getDepositos() != null && !producto.getDepositos().isEmpty()) {
+      dto.setIds_depositos(
+          producto.getDepositos().stream()
+              .map(models.Depositos::getIdDeposito)
+              .collect(Collectors.toList())
+      );
+      dto.setNombres_depositos(
+          producto.getDepositos().stream()
+              .map(models.Depositos::getNombreDeposito)
+              .collect(Collectors.toList())
+      );
+    }
+
     return dto;
   }
 

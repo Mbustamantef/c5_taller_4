@@ -42,15 +42,6 @@ public class Productos {
   @Column(name = "categoria", nullable = false, length = 100)
   private String categoria;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinTable(
-    name = "productos_proveedores",
-    joinColumns = @JoinColumn(name = "id_producto"),
-    inverseJoinColumns = @JoinColumn(name = "id_proveedor")
-  )
-  @JsonbTransient
-  private List<Proveedores> proveedores = new ArrayList<>();
-
   @NotNull(message = "El estado activo es obligatorio")
   @Column(name = "activo", nullable = false)
   private Boolean activo;
@@ -138,14 +129,6 @@ public class Productos {
 
   public void setMesCompra(Date mesCompra) {
     this.mesCompra = mesCompra;
-  }
-
-  public List<Proveedores> getProveedores() {
-    return proveedores;
-  }
-
-  public void setProveedores(List<Proveedores> proveedores) {
-    this.proveedores = proveedores;
   }
 
   public List<Depositos> getDepositos() {

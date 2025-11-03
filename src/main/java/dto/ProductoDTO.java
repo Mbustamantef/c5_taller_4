@@ -2,6 +2,7 @@ package dto;
 
 import jakarta.validation.constraints.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import java.util.List;
 
 @Schema(description = "DTO para transferencia de datos de Producto")
 public class ProductoDTO {
@@ -43,20 +44,14 @@ public class ProductoDTO {
   @Schema(description = "Fecha de compra del producto", example = "2025-10-15", required = true)
   private String mes_compra;
 
-  @NotNull(message = "La cantidad es obligatoria")
-  @Min(value = 0, message = "La cantidad no puede ser negativa")
-  @Schema(description = "Inserte el deposito correspondiente", example = "50", required = true)
-  private Integer id_deposito;
+  @Schema(description = "Lista de IDs de depósitos donde está disponible el producto", example = "[1, 2, 3]")
+  private List<Long> ids_depositos;
+
+  @Schema(description = "Lista de nombres de depósitos (solo lectura)", readOnly = true)
+  private List<String> nombres_depositos;
+
 
   public ProductoDTO() {
-  }
-
-  public Integer getId_deposito() {
-    return id_deposito;
-  }
-
-  public void setId_deposito(Integer id_deposito) {
-    this.id_deposito = id_deposito;
   }
 
   public Long getId_producto() {
@@ -121,5 +116,21 @@ public class ProductoDTO {
 
   public void setMes_compra(String mes_compra) {
     this.mes_compra = mes_compra;
+  }
+
+  public List<Long> getIds_depositos() {
+    return ids_depositos;
+  }
+
+  public void setIds_depositos(List<Long> ids_depositos) {
+    this.ids_depositos = ids_depositos;
+  }
+
+  public List<String> getNombres_depositos() {
+    return nombres_depositos;
+  }
+
+  public void setNombres_depositos(List<String> nombres_depositos) {
+    this.nombres_depositos = nombres_depositos;
   }
 }
