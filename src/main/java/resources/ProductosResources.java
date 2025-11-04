@@ -1,5 +1,6 @@
 package resources;
 
+import core.exceptions.UnauthorizedException;
 import dto.ApiResponse;
 import dto.ProductoDTO;
 import jakarta.inject.Inject;
@@ -9,6 +10,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
 import service.ProductosService;
 import java.util.List;
@@ -45,12 +47,18 @@ public class ProductosResources {
 
   @POST
   @Transactional
-  @Operation(summary = "Crear un nuevo producto")
-  public Response create(@Valid ProductoDTO productoDTO) {
+  @Operation(summary = "Crear un nuevo producto (requiere rol 'Creacion')")
+  public Response create(
+      @HeaderParam("X-User-Id") @Parameter(description = "ID del usuario que realiza la operación", required = true) Long userId,
+      @Valid ProductoDTO productoDTO) {
     try {
-      ProductoDTO created = productosService.create(productoDTO);
+      ProductoDTO created = productosService.create(productoDTO, userId);
       return Response.status(Response.Status.CREATED)
           .entity(ApiResponse.created("Producto creado exitosamente", created))
+          .build();
+    } catch (UnauthorizedException e) {
+      return Response.status(Response.Status.FORBIDDEN)
+          .entity(ApiResponse.error(e.getMessage()))
           .build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -62,15 +70,22 @@ public class ProductosResources {
   @PUT
   @Path("{id}")
   @Transactional
-  @Operation(summary = "Actualizar un producto")
-  public Response update(@PathParam("id") Long id, @Valid ProductoDTO productoDTO) {
+  @Operation(summary = "Actualizar un producto (requiere rol 'Creacion')")
+  public Response update(
+      @PathParam("id") Long id,
+      @HeaderParam("X-User-Id") @Parameter(description = "ID del usuario que realiza la operación", required = true) Long userId,
+      @Valid ProductoDTO productoDTO) {
     try {
-      Optional<ProductoDTO> updated = productosService.update(id, productoDTO);
+      Optional<ProductoDTO> updated = productosService.update(id, productoDTO, userId);
       if (updated.isPresent()) {
         return Response.ok(ApiResponse.success("Producto actualizado exitosamente", updated.get())).build();
       }
       return Response.status(Response.Status.NOT_FOUND)
           .entity(ApiResponse.notFound("Producto no encontrado con ID: " + id))
+          .build();
+    } catch (UnauthorizedException e) {
+      return Response.status(Response.Status.FORBIDDEN)
+          .entity(ApiResponse.error(e.getMessage()))
           .build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)

@@ -18,6 +18,9 @@ public class ProductosService {
   @Inject
   ProductosRepository productosRepository;
 
+  @Inject
+  AuditoriaService auditoriaService;
+
   private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
   public List<ProductoDTO> findAll() {
@@ -31,19 +34,24 @@ public class ProductosService {
         .map(this::toDTO);
   }
 
-  public ProductoDTO create(ProductoDTO dto) {
+  public ProductoDTO create(ProductoDTO dto, Long idUsuario) {
+    // Validar permisos y aplicar auditoría de creación
     Productos producto = toEntity(dto);
+    auditoriaService.aplicarAuditoriaCreacion(producto, idUsuario);
     productosRepository.persist(producto);
     return toDTO(producto);
   }
 
-  public Optional<ProductoDTO> update(Long id, ProductoDTO dto) {
+  public Optional<ProductoDTO> update(Long id, ProductoDTO dto, Long idUsuario) {
+    // Validar permisos y aplicar auditoría de modificación
     Optional<Productos> existing = productosRepository.findByIdOptional(id);
     if (existing.isEmpty()) {
       return Optional.empty();
     }
 
     Productos producto = existing.get();
+    auditoriaService.aplicarAuditoriaModificacion(producto, idUsuario);
+
     producto.setTitulo(dto.getTitulo());
     producto.setPrecioCosto(dto.getPrecio_costo());
     producto.setPrecioVenta(dto.getPrecio_venta());

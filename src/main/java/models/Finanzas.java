@@ -1,5 +1,6 @@
 package models;
 
+import core.generic.Auditable;
 import jakarta.json.bind.annotation.JsonbDateFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -8,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "finanzas", schema = "public")
-public class Finanzas {
+public class Finanzas extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

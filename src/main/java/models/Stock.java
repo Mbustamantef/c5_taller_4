@@ -1,12 +1,13 @@
 package models;
 
+import core.generic.Auditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "stock", schema = "public")
-public class Stock {
+public class Stock extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

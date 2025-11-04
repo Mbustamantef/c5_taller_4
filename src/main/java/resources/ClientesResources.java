@@ -1,5 +1,6 @@
 package resources;
 
+import core.exceptions.UnauthorizedException;
 import dto.ApiResponse;
 import dto.ClienteDTO;
 import jakarta.inject.Inject;
@@ -9,6 +10,7 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
 import org.eclipse.microprofile.openapi.annotations.tags.Tag;
@@ -54,16 +56,23 @@ public class ClientesResources {
 
   @POST
   @Transactional
-  @Operation(summary = "Crear un nuevo cliente", description = "Registra un nuevo cliente en el sistema")
+  @Operation(summary = "Crear un nuevo cliente (requiere rol 'Creacion')", description = "Registra un nuevo cliente en el sistema")
   @APIResponses(value = {
     @APIResponse(responseCode = "201", description = "Cliente creado exitosamente"),
-    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+    @APIResponse(responseCode = "403", description = "Sin permisos")
   })
-  public Response create(@Valid ClienteDTO clienteDTO) {
+  public Response create(
+      @HeaderParam("X-User-Id") @Parameter(description = "ID del usuario que realiza la operación", required = true) Long userId,
+      @Valid ClienteDTO clienteDTO) {
     try {
-      ClienteDTO created = clientesService.create(clienteDTO);
+      ClienteDTO created = clientesService.create(clienteDTO, userId);
       return Response.status(Response.Status.CREATED)
           .entity(ApiResponse.created("Cliente creado exitosamente", created))
+          .build();
+    } catch (UnauthorizedException e) {
+      return Response.status(Response.Status.FORBIDDEN)
+          .entity(ApiResponse.error(e.getMessage()))
           .build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -75,20 +84,28 @@ public class ClientesResources {
   @PUT
   @Path("{id}")
   @Transactional
-  @Operation(summary = "Actualizar un cliente", description = "Actualiza los datos de un cliente existente")
+  @Operation(summary = "Actualizar un cliente (requiere rol 'Creacion')", description = "Actualiza los datos de un cliente existente")
   @APIResponses(value = {
     @APIResponse(responseCode = "200", description = "Cliente actualizado exitosamente"),
     @APIResponse(responseCode = "404", description = "Cliente no encontrado"),
-    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos")
+    @APIResponse(responseCode = "400", description = "Datos de entrada inválidos"),
+    @APIResponse(responseCode = "403", description = "Sin permisos")
   })
-  public Response update(@PathParam("id") Long id, @Valid ClienteDTO clienteDTO) {
+  public Response update(
+      @PathParam("id") Long id,
+      @HeaderParam("X-User-Id") @Parameter(description = "ID del usuario que realiza la operación", required = true) Long userId,
+      @Valid ClienteDTO clienteDTO) {
     try {
-      Optional<ClienteDTO> updated = clientesService.update(id, clienteDTO);
+      Optional<ClienteDTO> updated = clientesService.update(id, clienteDTO, userId);
       if (updated.isPresent()) {
         return Response.ok(ApiResponse.success("Cliente actualizado exitosamente", updated.get())).build();
       }
       return Response.status(Response.Status.NOT_FOUND)
           .entity(ApiResponse.notFound("Cliente no encontrado con ID: " + id))
+          .build();
+    } catch (UnauthorizedException e) {
+      return Response.status(Response.Status.FORBIDDEN)
+          .entity(ApiResponse.error(e.getMessage()))
           .build();
     } catch (Exception e) {
       return Response.status(Response.Status.BAD_REQUEST)
@@ -115,3 +132,4 @@ public class ClientesResources {
         .build();
   }
 }
+

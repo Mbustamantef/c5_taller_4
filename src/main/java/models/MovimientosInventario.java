@@ -1,6 +1,8 @@
 package models;
 
+import core.generic.Auditable;
 import jakarta.json.bind.annotation.JsonbDateFormat;
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +11,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "movimientos_inventario", schema = "public")
-public class MovimientosInventario {
+public class MovimientosInventario extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

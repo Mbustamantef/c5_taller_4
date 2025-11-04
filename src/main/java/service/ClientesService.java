@@ -20,6 +20,9 @@ public class ClientesService {
   @Inject
   VentasRepository ventasRepository;
 
+  @Inject
+  AuditoriaService auditoriaService;
+
   public List<ClienteDTO> findAll() {
     return clientesRepository.listAll().stream()
         .map(this::toDTO)
@@ -31,19 +34,22 @@ public class ClientesService {
         .map(this::toDTO);
   }
 
-  public ClienteDTO create(ClienteDTO dto) {
+  public ClienteDTO create(ClienteDTO dto, Long idUsuario) {
     Clientes cliente = toEntity(dto);
+    auditoriaService.aplicarAuditoriaCreacion(cliente, idUsuario);
     clientesRepository.persist(cliente);
     return toDTO(cliente);
   }
 
-  public Optional<ClienteDTO> update(Long id, ClienteDTO dto) {
+  public Optional<ClienteDTO> update(Long id, ClienteDTO dto, Long idUsuario) {
     Optional<Clientes> existing = clientesRepository.findByIdOptional(id);
     if (existing.isEmpty()) {
       return Optional.empty();
     }
 
     Clientes cliente = existing.get();
+    auditoriaService.aplicarAuditoriaModificacion(cliente, idUsuario);
+
     cliente.setNombreCliente(dto.getNombre_cliente());
     cliente.setApellidoCliente(dto.getApellido_cliente());
     cliente.setCiCliente(dto.getCi_cliente());

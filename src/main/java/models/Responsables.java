@@ -1,5 +1,6 @@
 package models;
 
+import core.generic.Auditable;
 import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "responsables", schema = "public")
-public class Responsables {
+public class Responsables extends Auditable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
