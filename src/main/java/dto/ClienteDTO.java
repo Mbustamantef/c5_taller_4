@@ -31,8 +31,6 @@ public class ClienteDTO {
   @Schema(description = "Correo electrónico del cliente", example = "juan@example.com", required = true)
   private String correo_cliente;
 
-  @Schema(description = "ID de la venta asociada", example = "1")
-  private Long id_ventas;
 
   public ClienteDTO() {
   }
@@ -77,11 +75,4 @@ public class ClienteDTO {
     this.correo_cliente = correo_cliente;
   }
 
-  public Long getId_ventas() {
-    return id_ventas;
-  }
-
-  public void setId_ventas(Long id_ventas) {
-    this.id_ventas = id_ventas;
-  }
 }

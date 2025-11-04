@@ -1,9 +1,12 @@
 package models;
 
+import jakarta.json.bind.annotation.JsonbTransient;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "clientes", schema = "public")
@@ -34,9 +37,9 @@ public class Clientes {
   @Column(name = "correo_cliente", nullable = false, unique = true, length = 150)
   private String correoCliente;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "id_ventas")
-  private Ventas venta;
+  @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JsonbTransient
+  private List<Ventas> ventas = new ArrayList<>();
 
   // Getters and Setters
   public Long getIdCliente() {
@@ -79,11 +82,12 @@ public class Clientes {
     this.correoCliente = correoCliente;
   }
 
-  public Ventas getVenta() {
-    return venta;
+  public List<Ventas> getVentas() {
+    return ventas;
   }
 
-  public void setVenta(Ventas venta) {
-    this.venta = venta;
+  public void setVentas(List<Ventas> ventas) {
+    this.ventas = ventas;
   }
+
 }

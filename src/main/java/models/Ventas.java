@@ -19,9 +19,10 @@ public class Ventas {
   @Column(name = "id_ventas", nullable = false)
   private Long idVentas;
 
-  @OneToMany(mappedBy = "venta", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "id_cliente")
   @JsonbTransient
-  private List<Clientes> clientes = new ArrayList<>();
+  private Clientes cliente;
 
   @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(
@@ -57,12 +58,12 @@ public class Ventas {
     this.idVentas = idVentas;
   }
 
-  public List<Clientes> getClientes() {
-    return clientes;
+  public Clientes getCliente() {
+    return cliente;
   }
 
-  public void setClientes(List<Clientes> clientes) {
-    this.clientes = clientes;
+  public void setCliente(Clientes cliente) {
+    this.cliente = cliente;
   }
 
   public List<Productos> getProductos() {

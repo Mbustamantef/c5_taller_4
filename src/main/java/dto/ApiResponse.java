@@ -9,7 +9,7 @@ public class ApiResponse<T> {
   private String message;
 
   @Schema(description = "Código de estado HTTP", example = "200")
-  private int code;
+  private static int code;
 
   @Schema(description = "Datos de la respuesta")
   private T data;
@@ -31,7 +31,7 @@ public class ApiResponse<T> {
     return new ApiResponse<>(message, 201, data);
   }
 
-  public static <T> ApiResponse<T> error(String message, int code) {
+  public static <T> ApiResponse<T> error(String message) {
     return new ApiResponse<>(message, code, null);
   }
 

@@ -62,18 +62,7 @@ public class VentasService {
     ZonedDateTime fechaParaguay = ZonedDateTime.now(ZoneId.of("America/Asuncion"));
     Date fechaVenta = Date.from(fechaParaguay.toInstant());
 
-    // 4. Crear la venta
-    Ventas venta = new Ventas();
-    venta.setMonto(montoCalculado);
-    venta.setCantidad(dto.getCantidad());
-    venta.setMes(fechaVenta);
-
-    // 5. Asociar el producto a la venta
-    venta.getProductos().add(producto);
-
-    ventasRepository.persist(venta);
-
-    // 6. Manejar el cliente: usar existente o crear nuevo
+    // 4. Manejar el cliente: usar existente o crear nuevo
     Clientes cliente;
 
     if (dto.getId_cliente() != null) {
@@ -90,20 +79,39 @@ public class VentasService {
         throw new RuntimeException("Debe proporcionar id_cliente o todos los datos del nuevo cliente (nombre_cliente, apellido_cliente, ci_cliente, correo_cliente)");
       }
 
-      // Crear nuevo cliente
-      cliente = new Clientes();
-      cliente.setNombreCliente(dto.getNombre_cliente());
-      cliente.setApellidoCliente(dto.getApellido_cliente());
-      cliente.setCiCliente(dto.getCi_cliente());
-      cliente.setCorreoCliente(dto.getCorreo_cliente());
+      // Verificar si ya existe un cliente con ese CI
+      Optional<Clientes> clienteExistentePorCI = clientesRepository.find("ciCliente", dto.getCi_cliente()).firstResultOptional();
+
+      if (clienteExistentePorCI.isPresent()) {
+        // Si ya existe un cliente con ese CI, usar el existente
+        cliente = clienteExistentePorCI.get();
+      } else {
+        // Crear nuevo cliente solo si no existe
+        cliente = new Clientes();
+        cliente.setNombreCliente(dto.getNombre_cliente());
+        cliente.setApellidoCliente(dto.getApellido_cliente());
+        cliente.setCiCliente(dto.getCi_cliente());
+        cliente.setCorreoCliente(dto.getCorreo_cliente());
+
+        // Persistir el nuevo cliente antes de asociarlo con la venta
+        clientesRepository.persist(cliente);
+      }
     }
 
-    // Asociar el cliente a la venta
-    cliente.setVenta(venta);
-    clientesRepository.persist(cliente);
+    // 5. Crear la venta
+    Ventas venta = new Ventas();
+    venta.setMonto(montoCalculado);
+    venta.setCantidad(dto.getCantidad());
+    venta.setMes(fechaVenta);
 
-    // Agregar el cliente a la lista de clientes de la venta
-    venta.getClientes().add(cliente);
+    // 6. Asociar el cliente a la venta
+    venta.setCliente(cliente);
+
+    // 7. Asociar el producto a la venta
+    venta.getProductos().add(producto);
+
+    // 8. Persistir la venta
+    ventasRepository.persist(venta);
 
     return toDTO(venta);
   }
@@ -157,8 +165,8 @@ public class VentasService {
     }
 
     // Incluir información del cliente si existe
-    if (!venta.getClientes().isEmpty()) {
-      Clientes cliente = venta.getClientes().get(0);
+    if (venta.getCliente() != null) {
+      Clientes cliente = venta.getCliente();
       dto.setId_cliente(cliente.getIdCliente());
       dto.setNombre_cliente(cliente.getNombreCliente());
       dto.setApellido_cliente(cliente.getApellidoCliente());

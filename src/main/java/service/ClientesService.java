@@ -49,12 +49,6 @@ public class ClientesService {
     cliente.setCiCliente(dto.getCi_cliente());
     cliente.setCorreoCliente(dto.getCorreo_cliente());
 
-    if (dto.getId_ventas() != null) {
-      Ventas venta = ventasRepository.findById(dto.getId_ventas());
-      cliente.setVenta(venta);
-    } else {
-      cliente.setVenta(null);
-    }
 
     return Optional.of(toDTO(cliente));
   }
@@ -70,9 +64,6 @@ public class ClientesService {
     dto.setApellido_cliente(cliente.getApellidoCliente());
     dto.setCi_cliente(cliente.getCiCliente());
     dto.setCorreo_cliente(cliente.getCorreoCliente());
-    if (cliente.getVenta() != null) {
-      dto.setId_ventas(cliente.getVenta().getIdVentas());
-    }
     return dto;
   }
 
@@ -82,12 +73,6 @@ public class ClientesService {
     cliente.setApellidoCliente(dto.getApellido_cliente());
     cliente.setCiCliente(dto.getCi_cliente());
     cliente.setCorreoCliente(dto.getCorreo_cliente());
-
-    if (dto.getId_ventas() != null) {
-      Ventas venta = ventasRepository.findById(dto.getId_ventas());
-      cliente.setVenta(venta);
-    }
-
     return cliente;
   }
 }

@@ -31,6 +31,38 @@ public class FinanzasResources {
   }
 
   @GET
+  @Path("/calcular")
+  @Transactional
+  @Operation(summary = "Calcular finanzas por mes y año")
+  public Response calcularPorMesYAnio(
+      @QueryParam("mes") Integer mes,
+      @QueryParam("anio") Integer anio) {
+
+    if (mes == null || anio == null) {
+      return Response.status(Response.Status.BAD_REQUEST)
+          .entity(ApiResponse.badRequest("Debe proporcionar los parámetros 'mes' (1-12) y 'anio'"))
+          .build();
+    }
+
+    if (mes < 1 || mes > 12) {
+      return Response.status(Response.Status.BAD_REQUEST)
+          .entity(ApiResponse.badRequest("El mes debe estar entre 1 y 12"))
+          .build();
+    }
+
+    try {
+      FinanzaDTO finanzas = finanzasService.calcularFinanzasPorMesYAnio(mes, anio);
+      return Response.ok(ApiResponse.success(
+          "Finanzas calculadas para " + mes + "/" + anio, finanzas))
+          .build();
+    } catch (Exception e) {
+      return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+          .entity(ApiResponse.error("Error al calcular finanzas: " + e.getMessage()))
+          .build();
+    }
+  }
+
+  @GET
   @Path("{id}")
   @Operation(summary = "Obtener registro financiero por ID")
   public Response getById(@PathParam("id") Long id) {
